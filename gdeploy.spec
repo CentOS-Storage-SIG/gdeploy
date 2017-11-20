@@ -2,14 +2,13 @@
 %global gdeploytemp %{_datadir}/gdeploy
 
 Name:           gdeploy
-Version:        2.0.2
-%global gdeploy_release 14
-Release:        %{gdeploy_release}%{?dist}
+Version:        2.0.5
+Release:        1%{?dist}
 Summary:        Tool to deploy and manage GlusterFS cluster
 
 License:        GPLv3+
 URL:            https://github.com/gluster/gdeploy
-Source0:        %{url}/archive/v%{version}-%{gdeploy_release}.tar.gz#/%{name}-%{version}-%{gdeploy_release}.tar.gz
+Source0:        %{url}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 Requires:       PyYAML
 Requires:       ansible > 2.3
@@ -29,7 +28,7 @@ commands, create GlusterFS volumes and more.
 See http://gdeploy.readthedocs.io/en/latest/ for more details
 
 %prep
-%setup -q -n %{name}-%{version}-%{gdeploy_release}
+%setup -q -n %{name}-%{version}
 
 # We are sticking to python2 till we clean up the code
 # * Change print statements
@@ -115,6 +114,9 @@ configuration files to deploy and configure GlusterFS.
 %endif
 
 %changelog
+* Mon Nov 20 2017 Niels de Vos <ndevos@redhat.com> 2.0.5-1
+- Update to version 2.0.5
+
 * Tue Sep 5 2017 Niels de Vos <ndevos@redhat.com> 2.0.2-14
 - Rebuild from Fedora Rawhide for CentOS Storage SIG
 - Release stays the same, it is part of the upstream tarball :-(
