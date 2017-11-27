@@ -2,7 +2,7 @@
 %global gdeploytemp %{_datadir}/gdeploy
 
 Name:           gdeploy
-Version:        2.0.5
+Version:        2.0.6
 Release:        1%{?dist}
 Summary:        Tool to deploy and manage GlusterFS cluster
 
@@ -114,6 +114,9 @@ configuration files to deploy and configure GlusterFS.
 %endif
 
 %changelog
+* Mon Nov 27 2017 Sachidananda Urs <surs@redhat.com> 2.0.6-1
+- Update to version 2.0.6
+
 * Mon Nov 20 2017 Niels de Vos <ndevos@redhat.com> 2.0.5-1
 - Update to version 2.0.5
 
