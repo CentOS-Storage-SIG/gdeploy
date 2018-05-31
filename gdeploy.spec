@@ -1,9 +1,10 @@
+%{?systemd_requires}
 %global gdeploymod ansible/modules/gdeploy
 %global gdeploytemp %{_datadir}/gdeploy
 
 Name:           gdeploy
-Version:        2.0.6
-Release:        1%{?dist}
+Version:        2.0.8
+Release:        2%{?dist}
 Summary:        Tool to deploy and manage GlusterFS cluster
 
 License:        GPLv3+
@@ -11,12 +12,13 @@ URL:            https://github.com/gluster/gdeploy
 Source0:        %{url}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 Requires:       PyYAML
-Requires:       ansible > 2.3
+Requires:       ansible > 2.5
 Requires:       python2
 Requires:       lvm2
 
-BuildRequires:  python-setuptools
+BuildRequires:  python2-setuptools
 BuildRequires:  python2-devel
+BuildRequires:  systemd
 
 %description
 gdeploy is an Ansible based deployment tool. Initially gdeploy was written to
@@ -37,7 +39,8 @@ See http://gdeploy.readthedocs.io/en/latest/ for more details
 # ...
 
 %build
-%{__python2} setup.py build
+%py2_build
+
 %if 0%{?with_doc}
 pushd docs
 make html
@@ -46,7 +49,7 @@ popd
 
 %install
 # Install the binary and python libraries
-%{__python2} setup.py install --skip-build --root %{buildroot}
+%py2_install
 
 mkdir -p %{buildroot}/%{python2_sitelib}/%{gdeploymod}
 install -p -m 755 modules/* \
@@ -84,6 +87,16 @@ mkdir -p %{buildroot}/%{_mandir}/man1/ \
 cp -p man/gdeploy.1* %{buildroot}/%{_mandir}/man1/
 cp -p man/gdeploy.conf* %{buildroot}/%{_mandir}/man5/
 
+
+%post
+%systemd_post vdo.service
+
+%preun
+%systemd_preun vdo.service
+
+%postun
+%systemd_postun_with_restart vdo.service
+
 %files
 %{_bindir}/gdeploy
 %{python2_sitelib}/gdeploy*
@@ -100,7 +113,7 @@ cp -p man/gdeploy.conf* %{buildroot}/%{_mandir}/man5/
 %if 0%{?with_doc}
 %package doc
 Summary: gdeploy documentation
-BuildRequires:  python-sphinx
+BuildRequires:  python2-sphinx
 
 %description doc
 gdeploy is an Ansible based deployment tool, used to deploy and configure
@@ -114,6 +127,10 @@ configuration files to deploy and configure GlusterFS.
 %endif
 
 %changelog
+* Tue Apr 24 2018 Ramakrishna Yekulla <rreddy@redhat.com> 2.0.8-2
+- Updated to version 2.0.8
+- vdo related changes 
+
 * Mon Nov 27 2017 Sachidananda Urs <surs@redhat.com> 2.0.6-1
 - Update to version 2.0.6
 
